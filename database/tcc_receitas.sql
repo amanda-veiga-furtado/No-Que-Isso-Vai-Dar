@@ -1055,6 +1055,8 @@ CREATE TABLE IF NOT EXISTS `receita` (
   `tempoPreparoMinuto_receita` int NOT NULL,
   `modoPreparo_receita` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `imagem_receita` varchar(220) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '../css/img/receita/no_image.png',
+  `imagem_receita_blob` longblob,
+  `imagem_receita_mime` varchar(50) DEFAULT NULL,
   `categoria_receita` int DEFAULT NULL,
   `fk_id_usuario` int NOT NULL,
   PRIMARY KEY (`id_receita`),
