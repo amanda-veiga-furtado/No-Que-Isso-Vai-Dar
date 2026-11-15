@@ -104,7 +104,7 @@ function buscarIngredientesDaReceita($idReceita)
                             $query_receita_detalhes = "SELECT r.id_receita, r.nome_receita, r.numeroPorcao_receita, 
                                 p.nome_porcao, p.nome_porcao, 
                                 r.tempoPreparoHora_receita, r.tempoPreparoMinuto_receita, 
-                                r.imagem_receita, c.nome_categoria_culinaria
+                                c.nome_categoria_culinaria
                                 FROM receita r
                                 LEFT JOIN categoria_culinaria c ON r.categoria_receita = c.id_categoria_culinaria
                                 JOIN porcao_quantidade p ON r.tipoPorcao_receita = p.id_porcao
@@ -121,7 +121,7 @@ function buscarIngredientesDaReceita($idReceita)
                                     <a href="../registro_receita.php?id_receita=<?php echo htmlspecialchars($idReceita); ?>"
                                         style="text-decoration: none; display: block;">
                                         <div class="projcard-innerbox">
-                                            <img class="projcard-img" src="<?php echo htmlspecialchars('../' . $receita['imagem_receita']); ?>" alt="Imagem da receita"> alt="Imagem da receita">
+                                            <img class="projcard-img" src="<?php echo '../imagem_receita.php?id=' . (int) $idReceita; ?>" alt="Imagem da receita">
                                             <div class="projcard-textbox">
                                                 <div class="projcard-title" style="color: var(--cinza-secundario); margin-bottom: 10px; margin-top: 10px" title="<?php echo htmlspecialchars($receita['nome_receita']); ?>">
                                                     <?php

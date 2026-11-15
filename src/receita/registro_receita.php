@@ -16,7 +16,7 @@ try {
     // Query SQL para buscar os detalhes da receita
     $query_receita = "
         SELECT 
-            r.id_receita, r.nome_receita, r.numeroPorcao_receita, r.tempoPreparoHora_receita, r.tempoPreparoMinuto_receita, r.modoPreparo_receita, r.imagem_receita,
+            r.id_receita, r.nome_receita, r.numeroPorcao_receita, r.tempoPreparoHora_receita, r.tempoPreparoMinuto_receita, r.modoPreparo_receita,
             c.nome_categoria_culinaria,
             p.nome_porcao, p.nome_porcao,
             u.nome_usuario,
@@ -67,7 +67,6 @@ try {
 
 
         // Definindo as variáveis a partir dos dados da receita
-        $imagem_receita = $row_receita['imagem_receita'];
         $nome_receita = $row_receita['nome_receita'];
         $categoria = $row_receita['nome_categoria_culinaria'];
         $usuario = $row_receita['nome_usuario'];
@@ -130,7 +129,7 @@ try {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url('../css/img/fundo/<?php echo $randomImage; ?>.jpg') no-repeat center center;
+            /* background: url('../css/img/fundo/<?php echo $randomImage; ?>.jpg') no-repeat center center; */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -322,7 +321,7 @@ try {
             <div class="container_form">
 
                 <!-- Imagem da Receita -->
-                <img src="<?php echo htmlspecialchars($imagem_receita) ? htmlspecialchars($imagem_receita) : '../css/img/receita/imagem.png'; ?>" alt="Imagem da Receita">
+                <img src="imagem_receita.php?id=<?php echo (int) $id_receita; ?>" alt="Imagem da Receita">
 
                 <div class="container_conteudo_receita">
                     <div class="form-title-big">

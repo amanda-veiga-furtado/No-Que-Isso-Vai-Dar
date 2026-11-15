@@ -9,6 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 include_once '../include_once.php';
+require_once __DIR__ . '/../functions/imagem_receita.php';
 
 $erro = ""; // Inicializa uma variável para mensagens de erro
 
@@ -19,19 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica envio do formulário
         list($numeroPorcao_receita, $tipoPorcao_receita, $tempoPreparoHora, $tempoPreparoMinuto, $erro) = validateAndPrepareData($dados);
 
         if (empty($erro)) {
-            $caminho_imagem = ""; // Inicializa o caminho da imagem
-            if (!empty($_FILES['imagem_receita']['name'])) { // Verifica se há imagem para upload
-                $caminho_imagem = handleImageUpload($erro);
+            $imagem = null;
+            if (!empty($_FILES['imagem_receita_blob']['name'])) { // Verifica se há imagem para upload
+                $imagem = handleImageUpload($erro);
             }
 
             if (empty($erro)) {
                 try {
                     $query_insert = "INSERT INTO receita 
                                     (nome_receita, numeroPorcao_receita, tipoPorcao_receita, tempoPreparoHora_receita, 
-                                    tempoPreparoMinuto_receita, modoPreparo_receita, imagem_receita, categoria_receita, fk_id_usuario) 
+                                    tempoPreparoMinuto_receita, modoPreparo_receita, imagem_receita_blob, imagem_receita_mime, categoria_receita, fk_id_usuario) 
                                     VALUES 
                                     (:nome_receita, :numeroPorcao_receita, :tipoPorcao_receita, :tempoPreparoHora_receita, 
-                                    :tempoPreparoMinuto_receita, :modoPreparo_receita, :imagem_receita, :categoria_receita, :fk_id_usuario)";
+                                    :tempoPreparoMinuto_receita, :modoPreparo_receita, :imagem_receita_blob, :imagem_receita_mime, :categoria_receita, :fk_id_usuario)";
 
                     $statement_insert = $conn->prepare($query_insert);
                     $statement_insert->bindParam(':nome_receita', $dados['nome_receita']);
@@ -40,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica envio do formulário
                     $statement_insert->bindParam(':tempoPreparoHora_receita', $tempoPreparoHora);
                     $statement_insert->bindParam(':tempoPreparoMinuto_receita', $tempoPreparoMinuto);
                     $statement_insert->bindParam(':modoPreparo_receita', $dados['modoPreparo_receita']);
-                    $statement_insert->bindParam(':imagem_receita', $caminho_imagem);
+                    $statement_insert->bindValue(':imagem_receita_blob', $imagem['conteudo'] ?? '', PDO::PARAM_LOB);
+                    $statement_insert->bindValue(':imagem_receita_mime', $imagem['tipo'] ?? '', PDO::PARAM_STR);
                     $statement_insert->bindValue(':categoria_receita', $dados['categoria_receita'] === 'NULL' ? null : $dados['categoria_receita'], $dados['categoria_receita'] === 'NULL' ? PDO::PARAM_NULL : PDO::PARAM_INT);
                     $statement_insert->bindParam(':fk_id_usuario', $_SESSION['id_usuario']);
 
@@ -65,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica envio do formulário
     }
 }
 
-// Funções auxiliares
 function validateAndPrepareData($dados)
 {
     $numeroPorcao_receita = ltrim($dados['numeroPorcao_receita'], '0');
@@ -85,29 +86,6 @@ function validateAndPrepareData($dados)
     }
 
     return [$numeroPorcao_receita, $tipoPorcao_receita, $tempoPreparoHora, $tempoPreparoMinuto, $erro];
-}
-
-function handleImageUpload(&$erro)
-{
-    $extensao = strtolower(pathinfo($_FILES['imagem_receita']['name'], PATHINFO_EXTENSION));
-    if (!in_array($extensao, ['jpg', 'jpeg', 'png', 'gif'])) {
-        $erro .= "Formato de imagem inválido. Permitidos: jpg, jpeg, png, gif.";
-        return null;
-    }
-
-    $novo_nome = uniqid() . '.' . $extensao;
-    $caminho = '../css/img/receita/' . $novo_nome;
-
-    if (!is_dir('../css/img/receita')) {
-        mkdir('../css/img/receita', 0777, true);
-    }
-
-    if (!move_uploaded_file($_FILES['imagem_receita']['tmp_name'], $caminho)) {
-        $erro .= "Erro ao fazer upload da imagem. ";
-        return null;
-    }
-
-    return $caminho;
 }
 
 function addIngredientes($dados, $id_receita, &$erro)
@@ -194,7 +172,7 @@ function addIngredientes($dados, $id_receita, &$erro)
                     <input type="number" name="tempoPreparoMinuto_receita" min="0" style="width: 15%;" value="0" required> Minuto(s)
 
                     <h2>Imagem</h2>
-                    <input type="file" name="imagem_receita">
+                    <input type="file" name="imagem_receita_blob">
 
                     <h2>Ingredientes
                         <i class="fa-solid fa-circle-info" style="color: #74C0FC;"

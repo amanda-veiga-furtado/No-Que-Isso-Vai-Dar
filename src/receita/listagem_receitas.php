@@ -56,7 +56,7 @@ include_once '../include_once.php';
                     $query_receita = "SELECT r.id_receita, r.nome_receita, r.numeroPorcao_receita, 
                     p.nome_porcao, p.nome_porcao, 
                     r.tempoPreparoHora_receita, r.tempoPreparoMinuto_receita, 
-                    r.modoPreparo_receita, r.imagem_receita, 
+                    r.modoPreparo_receita, 
                     c.nome_categoria_culinaria, r.fk_id_usuario
                     FROM receita r
                     LEFT JOIN categoria_culinaria c ON r.categoria_receita = c.id_categoria_culinaria
@@ -84,7 +84,6 @@ include_once '../include_once.php';
                             $numeroPorcao_receita = $numeroPorcao_receita ?? 'Porção Indisponível';
                             $tempoPreparoHora_receita = $tempoPreparoHora_receita ?? '0';
                             $tempoPreparoMinuto_receita = $tempoPreparoMinuto_receita ?? '0';
-                            $imagem_receita = $imagem_receita ?? 'caminho/default_image.jpg';
                             $categoria_receita = $nome_categoria_culinaria ?? 'Categoria não disponível';
 
                             $numeroPorcao = intval($numeroPorcao_receita);
@@ -100,7 +99,7 @@ include_once '../include_once.php';
                                 <a href="registro_receita.php?id_receita=<?php echo htmlspecialchars($id_receita); ?>"
                                     style="text-decoration: none; display: block;">
                                     <div class="projcard-innerbox">
-                                        <img class="projcard-img" src="<?php echo htmlspecialchars($imagem_receita); ?>"
+                                        <img class="projcard-img" src="imagem_receita.php?id=<?php echo (int) $id_receita; ?>"
                                             alt="Imagem da receita">
                                         <div class="projcard-textbox">
                                             <div class="projcard-title" style="color: var(--cinza-secundario); margin-bottom: 10px; margin-top: 10px" title="<?php echo htmlspecialchars($nome_receita); ?>">
