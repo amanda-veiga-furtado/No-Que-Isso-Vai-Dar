@@ -43,7 +43,7 @@
             <?php endif; ?>
 
             <?php if ($isAdmin): ?>
-                <li><a href="/TCC/src/admin/dashboard_admin.php"><i class="fa-solid fa-eye-slash"></i></a></li>
+                <li><a href="/TCC/src/admin/dashboard_admin.php"><i class="fa-solid fa-lock-open"></i></a></li>
             <?php endif; ?>
         </ul>
     </nav>
