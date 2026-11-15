@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="toggle-line-big"></div>
             </div>
             <?php
-            $query_usuario = "SELECT id_usuario, nome_usuario, email_usuario, imagem_usuario, statusAdministrador_usuario
+            $query_usuario = "SELECT id_usuario, nome_usuario, email_usuario, statusAdministrador_usuario
                 FROM usuario
                 WHERE id_usuario = :id_usuario
                 LIMIT 1";

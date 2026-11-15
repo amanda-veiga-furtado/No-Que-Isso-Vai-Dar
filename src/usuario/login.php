@@ -107,7 +107,7 @@ include_once '../include_once.php';
                             if ($count > 0) {
                                 $_SESSION['mensagem'] = "Nome de usuário ou email já uso!";
                             } else {
-                                $stmt = $conn->prepare("INSERT INTO usuario (nome_usuario, email_usuario, senha_usuario) VALUES (:nome_usuario, :email_usuario, :senha_usuario)");
+                                $stmt = $conn->prepare("INSERT INTO usuario (nome_usuario, email_usuario, senha_usuario, imagem_usuario_blob, imagem_receita_mime) VALUES (:nome_usuario, :email_usuario, :senha_usuario, '', '')");
 
                                 $stmt->bindParam(':nome_usuario', $nome_usuario);
                                 $stmt->bindParam(':email_usuario', $email_usuario);
