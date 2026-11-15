@@ -1,90 +1,226 @@
 # No Que Isso Vai Dar?
 
-**No Que Isso Vai Dar?** é um site de receitas culinárias que permite aos usuários buscar, compartilhar e interagir com receitas de maneira simples e prática. A plataforma se destaca por oferecer uma busca personalizada com base nos ingredientes disponíveis, incentivando a criatividade na cozinha e promovendo a sustentabilidade alimentar ao reduzir o desperdício.
+Projeto de TCC em PHP, MySQL e JavaScript para compartilhar receitas culinárias de forma simples, prática e colaborativa. A plataforma permite que usuários cadastrem receitas, pesquisem por ingredientes, gerenciem perfil e participem de uma comunidade de culinária.
 
----
+## Visão geral
 
-## 📋 Funcionalidades
+O sistema foi pensado para facilitar a busca por receitas com base nos ingredientes disponíveis, reduzir desperdício e incentivar a criatividade na cozinha. Além disso, oferece áreas para:
 
-- **Cadastro e Login**: Usuários podem criar contas, gerenciar seus perfis e acessar funcionalidades personalizadas.
-- **Busca por Ingredientes**: Encontre receitas com base nos ingredientes disponíveis em casa.
-- **Publicação de Receitas**: Poste receitas com imagens, categorias e detalhes completos.
-- **Administração**: Funções para gerenciar usuários e receitas, incluindo banimento de contas e exclusão de conteúdo.
-- **Interação Social**: Comente, avalie, favorite e compartilhe receitas.
-- **Cálculo de Porções**: Ajuste as porções e veja as quantidades recalculadas automaticamente.
+- cadastro e login de usuários;
+- publicação e edição de receitas;
+- busca por nome, categoria e ingredientes;
+- autenticação de administradores;
+- recuperação de senha por e-mail;
+- gestão de usuários e conteúdo.
 
----
+## Stack
 
-## 🚀 Tecnologias Utilizadas
+- Front-end: HTML, CSS e JavaScript
+- Back-end: PHP
+- Banco de dados: MySQL
+- Dependência externa principal: PHPMailer
+- Ambiente recomendado: WAMP, XAMPP ou Apache + MySQL local
 
-- **Front-end**: HTML, CSS, JavaScript
-- **Back-end**: PHP
-- **Banco de Dados**: MySQL
-- **Gerenciamento**: Metodologia Kanban
-- **Hospedagem**: Compatível com ambientes de nuvem
+## Funcionalidades principais
 
----
+### Usuário
 
-## 📁 Estrutura do Projeto
+- Cadastro com nome de usuário, e-mail e senha
+- Login com validação de credenciais
+- Recuperação de senha por e-mail
+- Edição de perfil e foto de usuário
+- Publicação de receitas com ingredientes, preparo e imagem
+- Edição e exclusão das próprias receitas
+- Pesquisa por receitas por nome, categoria e ingredientes
+- Sugestões de ingredientes ou categorias
 
-- `/src`: Contém o código principal do projeto, incluindo front-end e back-end.
-  - `/css`: Arquivos de estilo e imagens.
-  - `/functions`: Funções auxiliares em PHP.
-  - `/home`: Páginas principais do site.
-  - `/receita`: Funcionalidades relacionadas às receitas, como cadastro, edição e listagem.
-  - `/usuario`: Funcionalidades relacionadas aos usuários, como login, registro e recuperação de senha.
-- `/database`: Scripts SQL para configuração do banco de dados MySQL.
-- `/libs`: Dependências externas, como PHPMailer.
-- `/docs`: Documentação e diagramas do projeto.
+### Administrador
 
----
+- Visualização de área administrativa
+- Banimento de usuários
+- Exclusão de receitas
+- Gestão do conteúdo do sistema
 
-## 📦 Instalação
+## Requisitos do sistema
 
-1. Clone este repositório:
-   ```bash
-   git clone https://github.com/amanda-veiga-furtado/TCC.git
-   ```
-2. Configure o banco de dados com o script SQL em `/database`.
-3. Configure um ambiente local (ex.: WAMP, XAMPP).
-4. Garanta que o Apache e MySQL estejam ativados.
-5. Acesse o projeto pelo navegador (ex.: `http://localhost/no-que-isso-vai-dar`).
+- PHP com suporte a PDO e extensão OpenSSL/mbstring normalmente exigidas no ambiente local
+- Composer
+- MySQL
+- Apache ou servidor web local compatível
+- phpMyAdmin (opcional, mas recomendado para importar o banco)
 
----
+## Estrutura do projeto
 
-## 👥 Contribuindo
+```text
+TCC/
+├── composer.json
+├── composer.lock
+├── README.md
+├── database/
+│   └── tcc_receitas.sql
+├── docs/
+├── installers/
+├── src/
+│   ├── admin/
+│   ├── css/
+│   ├── functions/
+│   ├── home/
+│   ├── receita/
+│   ├── usuario/
+│   ├── conexao.php
+│   ├── include_once.php
+│   ├── menu.php
+│   └── ...
+└── vendor/
+```
 
-Contribuições são bem-vindas! Siga os passos abaixo:
+## Configuração local
 
-1. Faça um fork do repositório.
-2. Crie uma branch com suas alterações:
-   ```bash
-   git checkout -b minha-feature
-   ```
-3. Faça o commit:
-   ```bash
-   git commit -m "Minha nova feature"
-   ```
-4. Envie para o repositório remoto:
-   ```bash
-   git push origin minha-feature
-   ```
-5. Abra um Pull Request.
+### 1) Clone o repositório
 
----
+```bash
+git clone https://github.com/amanda-veiga-furtado/TCC.git
+cd TCC
+```
 
-## 📄 Licença
+### 2) Instale as dependências
 
-Este projeto é licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
+```bash
+composer install
+```
 
----
+### 3) Crie e importe o banco de dados
 
-## 💡 Autora
+1. Inicie o MySQL no WAMP/XAMPP.
+2. Crie um banco chamado `tcc_receitas`.
+3. Importe o arquivo:
+
+```text
+database/tcc_receitas.sql
+```
+
+Se preferir, faça isso pelo phpMyAdmin e verifique se a estrutura do banco foi criada corretamente.
+
+### 4) Ajuste a conexão com o banco
+
+O arquivo de conexão está em `src/conexao.php` e usa a configuração padrão local:
+
+```php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$dbname = "tcc_receitas";
+$port = 3306;
+```
+
+Se o seu ambiente usar outras credenciais, ajuste esses valores antes de iniciar a aplicação.
+
+### 5) Configure o ambiente web
+
+- Coloque a pasta do projeto em `www` do WAMP ou `htdocs` do XAMPP.
+- Acesse no navegador por um endereço semelhante a:
+
+```text
+http://localhost/TCC
+```
+
+Ou, se o projeto estiver em uma pasta específica do servidor local, use o caminho equivalente.
+
+## Acesso inicial
+
+A aplicação possui fluxo principal com páginas de:
+
+- home;
+- login/cadastro;
+- dashboard do usuário;
+- dashboard do administrador;
+- cadastro de receitas;
+- listagem e busca de receitas.
+
+A entrada de login/cadastro pode ser acessada em:
+
+```text
+src/usuario/login.php
+```
+
+## Recuperação de senha por e-mail
+
+A recuperação de senha utiliza PHPMailer com SMTP autenticado. Para funcionar corretamente, as seguintes variáveis de ambiente devem ser configuradas no ambiente em que a aplicação está sendo executada:
+
+- `TCC_SMTP_HOST`
+- `TCC_SMTP_PORT` (normalmente `587` para TLS ou `465` para SSL)
+- `TCC_SMTP_ENCRYPTION` (`tls` ou `ssl`)
+- `TCC_SMTP_USER`
+- `TCC_SMTP_PASSWORD`
+- `TCC_EMAIL_FROM` (opcional; usa `TCC_SMTP_USER` se não for informado)
+- `TCC_BASE_URL` (URL base do projeto, por exemplo `http://localhost/TCC`)
+
+Observações:
+
+- Nunca versionar senhas SMTP no repositório.
+- Para contas do Gmail, normalmente é necessário usar uma senha de app.
+- O link de recuperação expira em aproximadamente uma hora e só pode ser usado uma vez.
+
+## Arquitetura do projeto
+
+O sistema segue uma estrutura de camadas simples, alinhada ao estudo de arquitetura web:
+
+- camada de apresentação: HTML, CSS e JavaScript;
+- camada de aplicação: páginas PHP e regras de negócio;
+- camada de dados: banco MySQL e consultas preparadas.
+
+Essa separação ajuda a manter a aplicação organizada e a reduzir a chance de falhas de segurança e manutenção.
+
+## Considerações de segurança
+
+- Senhas armazenadas com `password_hash()`
+- Operações com banco utilizando prepared statements
+- Validação de entradas em PHP e no front-end
+- Controle de acesso por perfil de usuário e administrador
+- Mensagens em português para uma melhor usabilidade
+
+## Estado atual
+
+Este projeto já contempla um conjunto funcional de recursos para o fluxo principal de um sistema de receitas, com foco em:
+
+- autenticação;
+- gestão de receitas;
+- busca e filtro;
+- perfil do usuário;
+- administração básica.
+
+Algumas melhorias futuras podem incluir:
+
+- favoritos;
+- denúncias;
+- comentários;
+- visualização por categoria;
+- cálculo automático de porções;
+- expansão da base de dados e filtros dinâmicos.
+
+## Contribuição
+
+Contribuições são bem-vindas. Para colaborar:
+
+```bash
+git checkout -b minha-feature
+# faça suas alterações
+git add .
+git commit -m "feat: adiciona melhoria no sistema"
+git push origin minha-feature
+```
+
+Em seguida, abra um pull request para revisão.
+
+## Licença
+
+Este repositório foi publicado como projeto acadêmico e de estudo. Para uso em produção, redistribuição ou adaptação comercial, confirme os termos com a autora ou mantenedora do projeto.
+
+## Autoria
 
 Projeto desenvolvido por **Amanda Veiga Furtado** como Trabalho de Conclusão de Curso (TCC) para o curso de Análise e Desenvolvimento de Sistemas da Faculdade de Tecnologia do Ipiranga.
 
----
+## Repositório
 
-### 🌐 Link do Projeto
+- GitHub: https://github.com/amanda-veiga-furtado/TCC
 
-[No Que Isso Vai Dar?](https://github.com/amanda-veiga-furtado/TCC)
