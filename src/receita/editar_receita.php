@@ -10,6 +10,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 include_once '../include_once.php';
+require_once __DIR__ . '/../functions/imagem_receita.php';
 
 $erro = ""; // Inicializa uma variável para armazenar mensagens de erro
 $dados = []; // Inicializa uma variável para armazenar mensagens de erro
@@ -21,7 +22,9 @@ if (!$id_receita) { // Verifica se o ID da receita é válido
     exit(); // Encerra a execução do script
 }
 
-$query = "SELECT * FROM receita WHERE id_receita = :id_receita"; // Consulta para selecionar dados da receita pelo ID
+$query = "SELECT nome_receita, numeroPorcao_receita, tipoPorcao_receita, tempoPreparoHora_receita,
+                 tempoPreparoMinuto_receita, modoPreparo_receita, categoria_receita
+          FROM receita WHERE id_receita = :id_receita"; // Consulta para selecionar dados da receita pelo ID
 $statement = $conn->prepare($query); // Prepara a consulta
 $statement->bindParam(':id_receita', $id_receita); // Liga o ID à consulta
 $statement->execute(); // Executa a consulta
@@ -47,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica se o formulário foi en
         list($numeroPorcao_receita, $tipoPorcao_receita, $tempoPreparoHora, $tempoPreparoMinuto, $erro) = validateAndPrepareData($dados); // Valida e processa os dados recebidos
 
         if (empty($erro)) { // Verifica se há erros na validação
-            $caminho_imagem = $dados['imagem_atual']; // Armazena a imagem atual da receita
-            if (!empty($_FILES['imagem_receita']['name'])) { // Se uma nova imagem foi enviada, trata o upload
-                $caminho_imagem = handleImageUpload($erro);
+            $imagem = null;
+            if (!empty($_FILES['imagem_receita_blob']['name'])) { // Se uma nova imagem foi enviada, trata o upload
+                $imagem = handleImageUpload($erro);
             }
 
             if (empty($erro)) {
@@ -61,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica se o formulário foi en
                                         SET nome_receita = :nome_receita, numeroPorcao_receita = :numeroPorcao_receita, 
                                         tipoPorcao_receita = :tipoPorcao_receita, tempoPreparoHora_receita = :tempoPreparoHora_receita, 
                                         tempoPreparoMinuto_receita = :tempoPreparoMinuto_receita, 
-                                        modoPreparo_receita = :modoPreparo_receita, imagem_receita = :imagem_receita, 
+                                        modoPreparo_receita = :modoPreparo_receita" .
+                                        ($imagem ? ", imagem_receita_blob = :imagem_receita_blob, imagem_receita_mime = :imagem_receita_mime" : "") . ",
                                         categoria_receita = :categoria_receita
                                         WHERE id_receita = :id_receita";
 
@@ -72,7 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica se o formulário foi en
                     $statement_update->bindParam(':tempoPreparoHora_receita', $tempoPreparoHora);
                     $statement_update->bindParam(':tempoPreparoMinuto_receita', $tempoPreparoMinuto);
                     $statement_update->bindParam(':modoPreparo_receita', $dados['modoPreparo_receita']);
-                    $statement_update->bindParam(':imagem_receita', $caminho_imagem);
+                    if ($imagem) {
+                        $statement_update->bindValue(':imagem_receita_blob', $imagem['conteudo'], PDO::PARAM_LOB);
+                        $statement_update->bindValue(':imagem_receita_mime', $imagem['tipo'], PDO::PARAM_STR);
+                    }
                     $statement_update->bindValue(':categoria_receita', $categoryValue, is_null($categoryValue) ? PDO::PARAM_NULL : PDO::PARAM_INT);
                     $statement_update->bindParam(':id_receita', $id_receita);
 
@@ -145,9 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Verifica se o formulário foi en
                     <input type="number" name="tempoPreparoMinuto_receita" id="tempoPreparoMinuto_receita" min="0" value="<?php echo htmlspecialchars($dados['tempoPreparoMinuto_receita'], ENT_QUOTES); ?>" style="width: 15%;" required> Minuto(s)
 
                     <h2>Imagem</h2>
-                    <input type="file" name="imagem_receita">
-                    <input type="hidden" name="imagem_atual" value="<?php echo htmlspecialchars($dados['imagem_receita'] ?? '', ENT_QUOTES); ?>">
-                    <img src="<?php echo $dados['imagem_receita'] ?? 'caminho_para_imagem_placeholder.png'; ?>" alt="Imagem da Receita" style="width: 100%;">
+                    <input type="file" name="imagem_receita_blob">
+                    <img src="imagem_receita.php?id=<?php echo (int) $id_receita; ?>" alt="Imagem da Receita" style="width: 100%;">
 
                     <h2>Ingredientes</h2>
                     <div id="ingredientes-container">
@@ -352,33 +358,6 @@ function validateAndPrepareData($dados)
 }
 
 
-
-function handleImageUpload(&$erro)
-{
-    $extensao = strtolower(pathinfo($_FILES['imagem_receita']['name'], PATHINFO_EXTENSION));
-    // if (!in_array($extensao, haystack: ['jpg', 'jpeg', 'png', 'gif'])) {
-    if (!in_array($extensao, haystack: ['png'])) {
-
-        // $erro .= "Formato de imagem inválido. ";
-        $erro .= "Formato de imagem inválido. Use PNG.";
-
-        return null;
-    }
-
-    $novo_nome = uniqid() . '.' . $extensao;
-    $caminho = '../css/img/receita/' . $novo_nome;
-
-    if (!is_dir('../css/img/receita')) {
-        mkdir('../css/img/receita', 0777, true);
-    }
-
-    if (!move_uploaded_file($_FILES['imagem_receita']['tmp_name'], $caminho)) {
-        $erro .= "Erro ao fazer upload da imagem. ";
-        return null;
-    }
-
-    return $caminho;
-}
 
 function editIngredientes($dados, $id_receita, &$erro)
 {

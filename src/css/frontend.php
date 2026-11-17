@@ -93,7 +93,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url('../css/img/fundo/<?php echo $randomImage; ?>.jpg')no-repeat center center;
+            /* background: url('../css/img/fundo/<?php echo $randomImage; ?>.jpg')no-repeat center center; */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -104,7 +104,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url('../../css/img/fundo/<?php echo $randomImage; ?>.jpg')no-repeat center center;
+            /* background: url('../../css/img/fundo/<?php echo $randomImage; ?>.jpg')no-repeat center center; */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

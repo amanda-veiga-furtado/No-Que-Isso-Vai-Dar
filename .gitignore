@@ -1,2 +1,6 @@
-/+arquivos/
-/Documentação/Exemplos de Documentação/
+/installers
+*.png
+/vendor
+/src/css/img
+composer.json
+/src/css/img

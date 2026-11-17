@@ -218,7 +218,7 @@ Este repositório foi publicado como projeto acadêmico e de estudo. Para uso em
 
 ## Autoria
 
-Projeto desenvolvido por **Amanda Veiga Furtado** como Trabalho de Conclusão de Curso (TCC) para o curso de Análise e Desenvolvimento de Sistemas da Faculdade de Tecnologia do Ipiranga.
+Projeto desenvolvido por Amanda Veiga Furtado como Trabalho de Conclusão de Curso (TCC) para o curso de Análise e Desenvolvimento de Sistemas da Faculdade de Tecnologia do Ipiranga.
 
 ## Repositório
 
