@@ -1,8 +1,23 @@
 <?php
-session_start();
-session_unset(); // Limpa todas as variáveis de sessão
-session_destroy(); // Destroi a sessão
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-// Redireciona para a página de login com a mensagem como parâmetro de URL
-header("Location: http://localhost/TCC/src/usuario/login.php?mensagem=" . urlencode("Deslogado com sucesso!"));
+$_SESSION = [];
+
+if (ini_get('session.use_cookies')) {
+    $parametros = session_get_cookie_params();
+    setcookie(session_name(), '', [
+        'expires' => time() - 42000,
+        'path' => $parametros['path'],
+        'domain' => $parametros['domain'],
+        'secure' => $parametros['secure'],
+        'httponly' => $parametros['httponly'],
+        'samesite' => $parametros['samesite'] ?? 'Lax',
+    ]);
+}
+
+session_destroy();
+
+header('Location: login.php?mensagem=' . rawurlencode('Deslogado com sucesso!'), true, 303);
 exit();
