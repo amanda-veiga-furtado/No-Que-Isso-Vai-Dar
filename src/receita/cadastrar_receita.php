@@ -210,9 +210,10 @@ function addIngredientes($dados, $id_receita, &$erro)
                                 }
                                 ?>
                             </select>
+                            <button type="button" class="remove-ingrediente button-round button-minus" title="Remova este ingrediente da sua receita"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
-                    <button type="button" id="add-ingrediente" class="button-round button-plus" title="Adicione 1 Ingrediente a Sua Receita"><i class="fa-solid fa-pencil"></i></button> <button type="button" id="remove-ingrediente" class="button-round button-minus" title="Remova 1 Ingrediente da Sua Receita"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" id="add-ingrediente" class="button-round button-plus" title="Adicione 1 Ingrediente a Sua Receita"><i class="fa-solid fa-pencil"></i></button>
 
 
                     <?php $placeholder_text = file_get_contents('receita.txt'); ?>
@@ -281,6 +282,7 @@ function addIngredientes($dados, $id_receita, &$erro)
                     <select name="nome_ingrediente[]" class="select-field" style="width: 45%;">${selectIngredienteOptions}</select>
                     <input class="input-field" type="number" name="quantidadeIngrediente[]" min="0.5" step="0.5" value="1" style="width: 15%;">
                     <select class="select-field" name="tipoIngrediente[]" style="width: 38%;">${selectTipoOptions}</select>
+                    <button type="button" class="remove-ingrediente button-round button-minus" title="Remova este ingrediente da sua receita"><i class="fa-solid fa-trash"></i></button>
                 `;
                     container.appendChild(newIngrediente);
                     ingredientesCount++;
@@ -289,11 +291,10 @@ function addIngredientes($dados, $id_receita, &$erro)
                 }
             });
 
-            // Remover ingrediente
-            document.getElementById('remove-ingrediente').addEventListener('click', function() {
-                const container = document.getElementById('ingredientes-container');
-                if (ingredientesCount > 1) {
-                    container.lastElementChild.remove();
+            // Remover o ingrediente associado ao botão pressionado
+            document.getElementById('ingredientes-container').addEventListener('click', function(event) {
+                if (event.target.closest('.remove-ingrediente') && ingredientesCount > 1) {
+                    event.target.closest('.ingrediente').remove();
                     ingredientesCount--;
                 }
             });
