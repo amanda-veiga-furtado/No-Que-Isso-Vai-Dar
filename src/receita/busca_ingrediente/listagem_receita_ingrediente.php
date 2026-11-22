@@ -18,12 +18,15 @@ function exibirIngredientes($ingredientes)
         echo '<div class="form-title-big" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top:0;">';
         global $conn;
         foreach ($ingredientes as $id) {
-            $stmt = $conn->prepare("SELECT nome_ingrediente FROM ingrediente WHERE id_ingrediente = :id");
+            $stmt = $conn->prepare("SELECT id_ingrediente, nome_ingrediente FROM ingrediente WHERE id_ingrediente = :id");
             $stmt->bindValue(':id', intval($id), PDO::PARAM_INT);
             $stmt->execute();
             $ingrediente = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($ingrediente) {
-                echo '<button style="font-size: 16px;">' . htmlspecialchars($ingrediente['nome_ingrediente']) . '</button>';
+                echo '<button style="font-size: 16px; display: inline-flex; align-items: center; gap: 8px;">'
+                    . '<img src="imagem_ingrediente.php?id=' . (int) $ingrediente['id_ingrediente'] . '" alt="" style="width: 32px; height: 32px; object-fit: cover; border-radius: 50%;">'
+                    . htmlspecialchars($ingrediente['nome_ingrediente'], ENT_QUOTES, 'UTF-8')
+                    . '</button>';
             }
         }
         echo '</div>';

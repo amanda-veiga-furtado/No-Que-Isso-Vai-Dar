@@ -37,7 +37,7 @@ $num_pagina = ceil($total_ingrediente / $quantidade_pg); // Calcula o número to
 if ($pesquisar) {
     // Prepara a query para buscar ingredientes pelo nome ou pela categoria, com prioridade para ingredientes
     $stmt = $conn->prepare("
-        SELECT ingrediente.*, categoria_ingrediente.nome_categoria_ingrediente, 
+        SELECT ingrediente.id_ingrediente, ingrediente.nome_ingrediente, categoria_ingrediente.nome_categoria_ingrediente,
             CASE 
                 WHEN nome_ingrediente LIKE :pesquisar THEN 1 
                 ELSE 2 
@@ -52,7 +52,7 @@ if ($pesquisar) {
 } else {
     // Prepara a query para buscar todos os ingredientes com limite de paginação
     $stmt = $conn->prepare("
-            SELECT ingrediente.*, categoria_ingrediente.nome_categoria_ingrediente 
+            SELECT ingrediente.id_ingrediente, ingrediente.nome_ingrediente, categoria_ingrediente.nome_categoria_ingrediente
             FROM ingrediente 
             LEFT JOIN categoria_ingrediente ON ingrediente.fk_id_categoria_ingrediente = categoria_ingrediente.id_categoria_ingrediente 
             LIMIT :inicio, :quantidade_pg
@@ -234,7 +234,7 @@ $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtém todos os registros 
                 <div class="card-wrapper">
                     
                     <div class="card">
-                        <img src="<?php echo htmlspecialchars($ingrediente['imagem_ingrediente']); ?>" alt="Ingrediente Image">
+                        <img src="imagem_ingrediente.php?id=<?php echo (int) $ingrediente['id_ingrediente']; ?>" alt="<?php echo htmlspecialchars($ingrediente['nome_ingrediente'], ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="container">
                             <h3 title="<?php
                                         echo htmlspecialchars($ingrediente['nome_ingrediente']);

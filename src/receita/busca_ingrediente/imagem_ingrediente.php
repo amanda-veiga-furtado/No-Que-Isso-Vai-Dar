@@ -13,7 +13,7 @@ if (!isset($conn) || !($conn instanceof PDO)) {
 
 try {
     $consulta = $conn->prepare(
-        'SELECT imagem_ingrediente_blob, imagem_ingrediente_mime
+        'SELECT imagem_ingrediente_blob
          FROM ingrediente
          WHERE id_ingrediente = :id_ingrediente'
     );
@@ -40,19 +40,31 @@ if ($conteudo === false) {
     exit;
 }
 
-$tipo = $ingrediente['imagem_ingrediente_mime'] ?? '';
 $tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-if ($conteudo === '' || $tipo === '') {
+if ($conteudo === null || $conteudo === '') {
     require __DIR__ . '/../../imagem_padrao.php';
     exit;
 }
-if (!in_array($tipo, $tiposPermitidos, true)) {
-    http_response_code(415);
+
+$tipo = null;
+if (strncmp($conteudo, "\xFF\xD8\xFF", 3) === 0) {
+    $tipo = 'image/jpeg';
+} elseif (strncmp($conteudo, "\x89PNG\r\n\x1a\n", 8) === 0) {
+    $tipo = 'image/png';
+} elseif (strncmp($conteudo, 'GIF87a', 6) === 0 || strncmp($conteudo, 'GIF89a', 6) === 0) {
+    $tipo = 'image/gif';
+} elseif (strncmp($conteudo, 'RIFF', 4) === 0 && substr($conteudo, 8, 4) === 'WEBP') {
+    $tipo = 'image/webp';
+}
+
+if ($tipo === null || !in_array($tipo, $tiposPermitidos, true)) {
+    require __DIR__ . '/../../imagem_padrao.php';
     exit;
 }
 
-$informacoes = getimagesizefromstring($conteudo);
+$informacoes = @getimagesizefromstring($conteudo);
 if (!$informacoes || $informacoes['mime'] !== $tipo) {
+    error_log('BLOB de imagem inválido para o ingrediente ' . $id_ingrediente);
     http_response_code(415);
     exit;
 }
