@@ -1,0 +1,15 @@
+### 2. Requisitos Previstos Ainda Não Implementados (Pendências)
+
+[ ] Recuperação de Conta (RF003): Fluxo de "Esqueci minha senha" com envio de token/link por e-mail.
+[ ] Favoritar Receitas (RF005): Botão para o usuário logado salvar receitas favoritas.
+[ ] Denunciar Receitas (RF005): Opção para reportar conteúdo inadequado ao administrador.
+[ ] Comentários e Avaliações (RF005): Sistema para postar comentários e notas (estrelas) nas receitas.
+[ ] Visualização por Categorias (RF011): Menu dedicado para navegar pelas receitas filtradas por categorias culinárias (ex.: *Sem Lactose*, *Culinária Portuguesa*).
+[ ] Cálculo Proporcional de Porções (RF012): Ajuste automático da quantidade de ingredientes ao alterar o número de porções (dobrar ou dividir receitas).
+[ ] Transformar em app
+
+### 3. Melhorias Futuras (Próximos Passos)
+
+[ ] Integração com Redes Sociais: Botões para compartilhamento direto de receitas.
+[ ] Busca Dinâmica no Campo `Select`: Permitir digitar o nome do ingrediente diretamente na caixa de seleção ao cadastrar/editar uma receita.
+[ ] Tela Inicial Dinâmica: Criar uma página inicial mais atrativa com *cardse atalhos para as principais funcionalidades.

@@ -1,9 +1,13 @@
 (function () {
-    const caracteresProibidos = new Set([',', '/', '\\', '@', '<', '>', '#', '$', '%', '&', '*', '{', '}', '[', ']']);
+    const caracteresProibidos = new Set([',', '\\', '@', '<', '>', '#', '$', '%', '&', '*', '{', '}', '[', ']']);
     const tiposDeTexto = new Set(['text', 'search', 'url', 'tel']);
 
     function deveValidar(campo) {
         if (!(campo instanceof HTMLInputElement || campo instanceof HTMLTextAreaElement)) {
+            return false;
+        }
+
+        if (campo.name === 'modoPreparo_receita') {
             return false;
         }
 

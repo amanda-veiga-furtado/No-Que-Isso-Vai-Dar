@@ -11,4 +11,4 @@ include_once 'conexao.php';
 include_once 'css/frontend.php';
 include_once 'menu.php';
 ?>
-<script src="/TCC/src/functions/validacao_campos_texto.js"></script>
+<script src="/TCC/src/functions/validacao_campos_texto.js?v=<?php echo filemtime(__DIR__ . '/functions/validacao_campos_texto.js'); ?>"></script>

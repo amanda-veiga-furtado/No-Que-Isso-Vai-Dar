@@ -1,7 +1,7 @@
 <?php
 function validarCamposTexto(array $campos): array
 {
-    $caracteresProibidos = ',/\\@<>#$%&*{}[]';
+    $caracteresProibidos = ',\\@<>#$%&*{}[]';
     $camposInvalidos = [];
 
     $validar = function (array $dados, string $prefixo = '') use (&$validar, &$camposInvalidos, $caracteresProibidos): void {
